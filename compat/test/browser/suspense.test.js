@@ -372,28 +372,21 @@ describe('suspense', () => {
 		);
 		render(
 			<Fragment>
-				{/*
-					TODO: Update Suspense to use this.state to manage it's children so that it can
-					take advantage of the _dom pointer tracking that happens in `forceUpdate` to
-					unmount fallback and properly mount the new content
-			 	*/}
-				<div>
-					{suspense}
-				</div>
+				{suspense}
 				<Stateful />
 			</Fragment>,
 			scratch
 		);
 
 		expect(scratch.innerHTML).to.eql(
-			`<div><div>Suspense</div></div><div>Stateful: initial</div>`
+			`<div>Suspense</div><div>Stateful: initial</div>`
 		);
 
 		setState({ s: 'first' });
 		rerender();
 
 		expect(scratch.innerHTML).to.eql(
-			`<div><div>Suspense</div></div><div>Stateful: first</div>`
+			`<div>Suspense</div><div>Stateful: first</div>`
 		);
 
 		const [resolve] = suspend();
@@ -401,20 +394,20 @@ describe('suspense', () => {
 		rerender();
 
 		expect(scratch.innerHTML).to.eql(
-			`<div><div>Suspended...</div></div><div>Stateful: first</div>`
+			`<div>Suspended...</div><div>Stateful: first</div>`
 		);
 
 		setState({ s: 'second' });
 		rerender();
 
 		expect(scratch.innerHTML).to.eql(
-			`<div><div>Suspended...</div></div><div>Stateful: second</div>`
+			`<div>Suspended...</div><div>Stateful: second</div>`
 		);
 
 		return resolve(() => <div>Suspense</div>).then(() => {
 			rerender();
 			expect(scratch.innerHTML).to.eql(
-				`<div><div>Suspense</div></div><div>Stateful: second</div>`
+				`<div>Suspense</div><div>Stateful: second</div>`
 			);
 		});
 	});
@@ -511,7 +504,6 @@ describe('suspense', () => {
 				<Catcher>
 					<Suspender1 />
 					<div>
-						{/* TODO: Try to update such that this div is not needed */}
 						<Suspender2 />
 					</div>
 				</Catcher>
